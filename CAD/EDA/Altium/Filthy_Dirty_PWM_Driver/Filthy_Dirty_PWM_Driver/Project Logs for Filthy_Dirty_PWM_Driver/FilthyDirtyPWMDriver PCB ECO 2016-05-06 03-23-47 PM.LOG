@@ -1,0 +1,41 @@
+Added Component: Designator=C1(RAD-0.3)
+Added Component: Designator=C2(RAD-0.3)
+Added Component: Designator=D1(DO-35)
+Added Component: Designator=D2(DO-35)
+Added Component: Designator=External 100K POT(HDR1X3)
+Added Component: Designator=Power in(HDR1X2)
+Added Component: Designator=PWM out(HDR1X2)
+Added Component: Designator=U1(N08E)
+Added Pin To Net: NetName=GND Pin=C1-1
+Added Pin To Net: NetName=GND Pin=C2-1
+Added Pin To Net: NetName=GND Pin=Power in-2
+Added Pin To Net: NetName=GND Pin=U1-1
+Added Net: Name=GND
+Added Pin To Net: NetName=NetC1_2 Pin=C1-2
+Added Pin To Net: NetName=NetC1_2 Pin=D1-1
+Added Pin To Net: NetName=NetC1_2 Pin=D2-2
+Added Pin To Net: NetName=NetC1_2 Pin=U1-2
+Added Pin To Net: NetName=NetC1_2 Pin=U1-6
+Added Net: Name=NetC1_2
+Added Pin To Net: NetName=NetC2_2 Pin=C2-2
+Added Pin To Net: NetName=NetC2_2 Pin=U1-5
+Added Net: Name=NetC2_2
+Added Pin To Net: NetName=NetD1_2 Pin=D1-2
+Added Pin To Net: NetName=NetD1_2 Pin=External 100K POT-1
+Added Net: Name=NetD1_2
+Added Pin To Net: NetName=NetD2_1 Pin=D2-1
+Added Pin To Net: NetName=NetD2_1 Pin=External 100K POT-3
+Added Net: Name=NetD2_1
+Added Pin To Net: NetName=NetExternal 100K POT_2 Pin=External 100K POT-2
+Added Pin To Net: NetName=NetExternal 100K POT_2 Pin=U1-3
+Added Net: Name=NetExternal 100K POT_2
+Added Pin To Net: NetName=NetPWM out_2 Pin=PWM out-2
+Added Pin To Net: NetName=NetPWM out_2 Pin=U1-7
+Added Net: Name=NetPWM out_2
+Added Pin To Net: NetName=VCC Pin=Power in-1
+Added Pin To Net: NetName=VCC Pin=PWM out-1
+Added Pin To Net: NetName=VCC Pin=U1-4
+Added Pin To Net: NetName=VCC Pin=U1-8
+Added Net: Name=VCC
+Added Class: Name=DirtyPWM
+Added Room: Name=DirtyPWM

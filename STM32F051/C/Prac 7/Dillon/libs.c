@@ -1,0 +1,262 @@
+#include "libs.h"
+#include <stdint.h>
+#define STM32F051
+#include "stm32f0xx.h"
+#define TRUE 1;
+#define FALSE 0;
+
+//Defining global variables (GASP!!! Not a global variable in C!!!)
+int btn0_previous_state = 0;
+int btn1_previous_state = 0;
+int btn2_previous_state = 0;
+int btn3_previous_state = 0;
+
+void lib_init_leds(void){
+	//enable the GPIOb clock
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+	//enable GPIOB into output mode	
+	GPIOB-> MODER = 0x5555;
+}
+
+void lib_write_leds(uint8_t led_val){
+	//write led_val to leds
+	GPIOB->ODR = led_val;
+}
+
+uint8_t lib_read_leds(void){
+	//Reads the value currently displayed on leds
+	uint8_t value;
+	value = GPIOB->ODR;
+	return value;
+}
+
+void lib_init_buttons(void){
+	//enable the GPIOA clock
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+	//Enable pull ups on switch pins
+	GPIOA->PUPDR |= 0x55;
+}
+
+int lib_read_button_0(void){
+	//if input data & 0001 = 0
+	if((GPIOA->IDR & 0x1) == 0){
+		//returns 1
+		return TRUE;
+	}
+	else{
+		//returns 0
+		return FALSE;
+	}
+}
+
+int lib_read_button_1(void){
+	//if input data & 0010 = 0
+	if((GPIOA->IDR & 0x2) == 0){
+		//returns 1
+		return TRUE;
+	}
+	else{
+		//returns 0
+		return FALSE;
+	}
+}
+
+int lib_read_button_2(void){
+	//if input data & 0100 = 0
+	if((GPIOA->IDR & 0x4) == 0){
+		//returns 1
+		return TRUE;
+	}
+	else{
+		//returns 0
+		return FALSE;
+	}
+}
+
+int lib_read_button_3(void){
+	//if input data & 1000 = 0
+	if((GPIOA->IDR & 0x8) == 0){
+		//returns 0
+		return TRUE;
+	}
+	else{
+		//returns 1
+		return FALSE;
+	}
+}
+
+int lib_read_falling_edge_button0(void){
+	int current_state = lib_read_button_0();
+	//	switch is pressed	was previously not pressed
+	if((current_state == 1) & (btn0_previous_state == 0)){
+		return TRUE;
+	}
+	else{
+		btn0_previous_state = current_state;
+		return FALSE;
+	}
+}
+
+int lib_read_falling_edge_button1(void){
+	int current_state = lib_read_button_1();
+	//	switch is pressed	was previously not pressed
+	if((current_state == 1) & (btn1_previous_state == 0)){
+		return TRUE;
+	}
+	else{
+		btn1_previous_state = current_state;
+		return FALSE;
+	}
+}
+
+int lib_read_falling_edge_button2(void){
+	int current_state = lib_read_button_2();
+	//	switch is pressed	was previously not pressed
+	if((current_state == 1) & (btn0_previous_state == 0)){
+		return TRUE;
+	}
+	else{
+		btn2_previous_state = current_state;
+		return FALSE;
+	}
+}
+
+int lib_read_falling_edge_button3(void){
+	int current_state = lib_read_button_3();
+	//	switch is pressed	was previously not pressed
+	if((current_state == 1) & (btn0_previous_state == 0)){
+		return TRUE;
+	}
+	else{
+		btn3_previous_state = current_state;
+		return FALSE;
+	}
+}
+
+void lib_init_adc_6bit(void){
+	//start clock for ADC
+	RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
+	//Configure the resolution
+	ADC1->CFGR1 |= 0x18;
+	//enable the ADC
+	ADC1->CR |= ADC_CR_ADEN;
+	
+	//wait till ADC flag is ready
+	while ((ADC1->ISR & 0x1)!=1);
+}
+
+void lib_init_adc_8bit(void){
+	//start clock for ADC
+	RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
+	//Configure the resolution
+	ADC1->CFGR1 |= 0x10;
+	//enable the ADC
+	ADC1->CR |= ADC_CR_ADEN;
+	
+	//wait till ADC flag is ready
+	while ((ADC1->ISR & 0x1)!=1);
+}
+
+void lib_init_adc_10bit(void){
+	//start clock for ADC
+	RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
+	//Configure the resolution
+	ADC1->CFGR1 |= 0x8;
+	//enable the ADC
+	ADC1->CR |= ADC_CR_ADEN;
+	
+	//wait till ADC flag is ready
+	while ((ADC1->ISR & 0x1)!=1);
+}
+
+void lib_init_adc_12bit(void){
+	//start clock for ADC
+	RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
+	//Configure the resolution
+	ADC1->CFGR1 |= 0x0;
+	//enable the ADC
+	ADC1->CR |= ADC_CR_ADEN;
+	
+	//wait till ADC flag is ready
+	while ((ADC1->ISR & ADC_ISR_ADRDY)!= 1);
+}
+
+void lib_adc_cal(void){
+	ADC1->CR = ADC_CR_ADCAL;
+	while((ADC1->CR & ADC_CR_ADCAL) == 1);
+}
+
+void lib_init_pot0(void){
+	GPIOA->MODER |= GPIO_MODER_MODER5;
+}
+
+void lib_init_pot1(void){
+	GPIOA->MODER |= GPIO_MODER_MODER6;
+}
+
+uint8_t lib_read_pot0(void){
+	//16 bits to store ADC val (6bit to 12 bit)
+	uint16_t pot0_value;
+	//Select channel 5 in adc
+	ADC1->CHSELR = ADC_CHSELR_CHSEL5;
+	//Begin the ADC conversion
+	ADC1->CR |= ADC_CR_ADSTART;
+	//Wait for conversion
+	while((ADC1->ISR & ADC_ISR_EOC) == 0);
+	//set the value to what is in the ADC data register
+	pot0_value = ADC1->DR;
+	
+	return pot0_value;
+}
+
+uint8_t lib_read_pot1(void){
+	//16 bits to store ADC val (6bit to 12 bit)
+	uint16_t pot1_value;
+	//Select channel 5 in adc
+	ADC1->CHSELR = ADC_CHSELR_CHSEL6;
+	//Begin the ADC conversion
+	ADC1->CR |= ADC_CR_ADSTART;
+	//Wait for conversion
+	while((ADC1->ISR & ADC_ISR_EOC) == 0);
+	//set the value to what is in the ADC data register
+	pot1_value = ADC1->DR;
+	
+	return pot1_value;
+}
+
+
+
+
+
+/* Non hardware control functions */
+
+/**
+ * Insort a int32 array using quicksort algorithm.
+ * Based on Lomuto partion scheme.
+ */
+void libs_quicksort(int32_t* a,uint32_t lo, uint32_t hi) {
+    if( lo < hi) {
+        uint32_t p = partition(a, lo, hi);
+        libs_quicksort(a, lo, p - 1);
+        libs_quicksort(a, p + 1, hi);
+    }
+}
+
+//Helper function for quicksort
+uint32_t partition(int32_t* a,uint32_t lo, uint32_t hi){
+    int32_t pivot = a[hi];
+    uint32_t i = lo;
+    uint32_t j;
+    for(j = lo; j < (hi - 1); j++){
+        if(a[j] <= pivot){
+            int32_t tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++;
+        }
+    }
+    int32_t tmp2 = a[i];
+    a[i] = a[hi];
+    a[hi] = tmp2;
+    return i;
+}

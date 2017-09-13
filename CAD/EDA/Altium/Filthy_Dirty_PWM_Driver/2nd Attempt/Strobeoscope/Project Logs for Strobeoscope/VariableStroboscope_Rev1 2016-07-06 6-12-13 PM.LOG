@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=1MPot1 NewDesignator=Pot1
+Change Component Designator: OldDesignator=1MPot2 NewDesignator=Pot2
+Change Component Designator: OldDesignator=StrbOut NewDesignator=Strb
+Change Net Name : Old Net Name=Net1MPot1_1 New Net Name=NetPot1_1
+Change Net Name : Old Net Name=Net1MPot1_2 New Net Name=NetC1_2
+Change Net Name : Old Net Name=Net1MPot2_2 New Net Name=NetC2_2

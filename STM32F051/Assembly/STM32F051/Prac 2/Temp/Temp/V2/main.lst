@@ -1,0 +1,154 @@
+ARM GAS  main.s 			page 1
+
+
+   1              	@HLDDIL001 HYLMUH001
+   2              		.syntax unified
+   3              		.cpu cortex-m0
+   4              		.thumb
+   5              		.global _start
+   6              	
+   7              	vectors:
+   8 0000 00200020 		.word 0x20002000
+   9 0004 01000000 		.word _start + 1
+  10              	
+  11              	_start:
+  12              		@ Initialisations block
+  13 0008 194E     		LDR R6, RCC_BASE		@Configure GPIO A and B Clock
+  14 000a 1A48     		LDR R0, AHBENR_GPIOAB
+  15 000c 7061     		STR R0, [R6, #0x14]		
+  16              		
+  17 000e 1A4E     		LDR R6, GPIOB_BASE		@Set first 8 GPIOs to Outputs
+  18 0010 1B48     		LDR R0, MODER_OUTPUT
+  19 0012 3060     		STR R0, [R6, #0]
+  20              		
+  21 0014 194D     		LDR R5, GPIOA_BASE		@Set first 4 GPIOs to Inputs
+  22 0016 1B48     		LDR R0, MODERA_INPUT
+  23 0018 2860     		STR R0, [R5, #0]
+  24              		
+  25 001a 184D     		LDR R5, GPIOA_BASE		@Configure first 4 GPIOA pins as Pulled Up (this line can be removed)
+  26 001c 1A48     		LDR R0, GPIOA_PULLUP
+  27 001e E860     		STR R0, [R5, #0x0C]
+  28              		
+  29 0020 0021     		MOVS R1, #0x00			@Initialise R1 to 0
+  30              	    
+  31 0022 164D     	    LDR R5, GPIOA_BASE      @Stores the input data register in R3
+  32 0024 2B61     	    STR R3, [R5, #0x10]
+  33              	    
+  34              		
+  35              			
+  36              	main_loop:
+  37              		@ Main block
+  38 0026 0A00     	    MOVS R2, R1				@Write value to LEDs
+  39 0028 7261     		STR R2, [R6, #0x14]
+  40              	    
+  41 002a 0127     	    MOVS R7, #1              @Incrementation register set to 1 by default
+  42 002c 1748     	    LDR R0, LOOP_LENGTH1SEC @Default delay time
+  43              	    
+  44              	    @Check if SW0 pressed
+  45 002e 0E24     	    MOVS R4, #0b1110
+  46 0030 2340     	    ANDS R3, R3, R4
+  47 0032 10D0     	    BEQ SW0Pressed
+  48              	SW0Checked:
+  49              	
+  50              	    @Check if SW1 pressed
+  51 0034 0D24     	    MOVS R4, #0b1101
+  52 0036 2340     	    ANDS R3, R3, R4
+  53 0038 0FD0     	    BEQ SW1Pressed
+  54              	SW1Checked:
+  55              	
+  56              	    @Check if SW2 pressed 
+  57 003a 0B24     	    MOVS R4, #0b1011
+ARM GAS  main.s 			page 2
+
+
+  58 003c 2340     	    ANDS R3, R3, R4
+  59 003e 0ED0     	    BEQ SW2Pressed
+  60              	@Note if sw2 is pressed, it'll overide sw3 
+  61              	    
+  62              	    @Check if SW3 pressed
+  63 0040 0724     	    MOVS R4, #0b0111
+  64 0042 2340     	    ANDS R3, R3, R4
+  65 0044 0ED0     	    BEQ SW3Pressed
+  66              	SW3Checked:
+  67              	
+  68              	    @Delay function
+  69 0046 00F00FF8 		BL delay  
+  70 004a D119     	    ADDS R1, R2, R7	@Add R7 to previous value and store it in R1, will be skipped if SW2 was presse
+  71 004c EBE7     	    B main_loop
+  72              	    
+  73              	SW2Checked:
+  74 004e 00F00BF8 	    BL delay
+  75 0052 D11B     	    SUBS R1, R2, R7
+  76 0054 E7E7     		B main_loop
+  77              	    
+  78              	@***********************************
+  79              	@Check statements:    
+  80              	SW0Pressed:   
+  81 0056 0227     	    MOVS R7, #2   @increments with 2
+  82 0058 ECE7     	    B SW0Checked
+  83              	    
+  84              	SW1Pressed:    
+  85 005a 0D48     		LDR R0, LOOP_LENGTH04SEC		@Load the delay time in R0
+  86 005c EDE7     	    B SW1Checked
+  87              	    
+  88              	SW2Pressed:
+  89 005e 0D48     	    LDR R0, LOOP_LENGTH03SEC        @Load the delay time in R0
+  90 0060 0127     	    MOVS R7, #1
+  91 0062 F4E7     	    B SW2Checked
+  92              	
+  93              	SW3Pressed:
+  94 0064 0027     	    MOVS R7, #0
+  95 0066 EEE7     	    B SW3Checked
+  96              	
+  97              	        
+  98              	delay:
+  99 0068 0138     		SUBS R0, #1
+ 100 006a 0028     		CMP R0, #0
+ 101 006c FCD1     		BNE delay
+ 102 006e 7047     		Bx lr
+ 103              	
+ 104              		.align
+ 105 0070 00100240 	RCC_BASE: 		.word 0x40021000
+ 106 0074 00000600 	AHBENR_GPIOAB: 	.word 0b1100000000000000000
+ 107 0078 00040048 	GPIOB_BASE: 	.word 0x48000400
+ 108 007c 00000048 	GPIOA_BASE:		.word 0x48000000
+ 109 0080 55550000 	MODER_OUTPUT: 	.word 0X5555
+ 110 0084 00000028 	MODERA_INPUT: 	.word 0x28000000
+ 111 0088 55000000 	GPIOA_PULLUP:	.word 0x55
+ 112 008c 00127A00 	LOOP_LENGTH1SEC: .word 0x7A1200				@1600000 in dec = 1sec
+ 113 0090 0048E801 	LOOP_LENGTH04SEC:   .word 0x01E84800
+ 114 0094 009F2400 	LOOP_LENGTH03SEC:   .word 0x249F00      
+ARM GAS  main.s 			page 3
+
+
+ARM GAS  main.s 			page 4
+
+
+DEFINED SYMBOLS
+              main.s:11     .text:00000008 _start
+              main.s:7      .text:00000000 vectors
+              main.s:105    .text:00000070 RCC_BASE
+                            .text:00000000 $d
+              main.s:13     .text:00000008 $t
+              main.s:106    .text:00000074 AHBENR_GPIOAB
+              main.s:107    .text:00000078 GPIOB_BASE
+              main.s:109    .text:00000080 MODER_OUTPUT
+              main.s:108    .text:0000007c GPIOA_BASE
+              main.s:110    .text:00000084 MODERA_INPUT
+              main.s:111    .text:00000088 GPIOA_PULLUP
+              main.s:36     .text:00000026 main_loop
+              main.s:112    .text:0000008c LOOP_LENGTH1SEC
+              main.s:80     .text:00000056 SW0Pressed
+              main.s:48     .text:00000034 SW0Checked
+              main.s:84     .text:0000005a SW1Pressed
+              main.s:54     .text:0000003a SW1Checked
+              main.s:88     .text:0000005e SW2Pressed
+              main.s:93     .text:00000064 SW3Pressed
+              main.s:66     .text:00000046 SW3Checked
+              main.s:98     .text:00000068 delay
+              main.s:73     .text:0000004e SW2Checked
+              main.s:113    .text:00000090 LOOP_LENGTH04SEC
+              main.s:114    .text:00000094 LOOP_LENGTH03SEC
+              main.s:105    .text:00000070 $d
+
+NO UNDEFINED SYMBOLS

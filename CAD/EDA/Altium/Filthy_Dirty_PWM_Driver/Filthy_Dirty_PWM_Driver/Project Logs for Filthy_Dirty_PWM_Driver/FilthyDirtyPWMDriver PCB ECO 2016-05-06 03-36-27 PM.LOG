@@ -1,0 +1,4 @@
+Added Component: Designator=C3(C0805)
+Added Component: Designator=C4(C0805)
+Added Member To Class: ClassName=DirtyPWM Member=Component C3 Cap Pol3
+Added Member To Class: ClassName=DirtyPWM Member=Component C4 Cap Pol3

@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: C:\Users\Dillo\Documents\UCT\First Year\1st Semester\MEC1003\Altium\Final Assignment\Filthy_Dirty_PWM_Driver\2nd Attempt\Strobeoscope\VariableStroboscope_Rev1.1.PcbDoc
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=15.75
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=10.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0

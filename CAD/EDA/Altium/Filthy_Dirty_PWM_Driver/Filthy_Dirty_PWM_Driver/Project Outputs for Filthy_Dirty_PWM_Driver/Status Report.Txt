@@ -1,0 +1,10 @@
+Output: Mixed Sim
+Type  : AdvSimNetlist
+From  : Project [Filthy_Dirty_PWM_Driver.PrjPcb]
+   Generated File[Filthy_Dirty_PWM_Driver.nsx]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 12:18:09 PM On 2016/05/08

@@ -1,0 +1,8 @@
+PSC = ((8MHz*(t1-t0))/ADC)-1
+
+OFFSET = ((8MHz*t0)/(PSC+1))-1
+
+
+*pntr = value at the mem address which pntr stores
+&pntr = mem address of pntr
+pntr = mem address of value

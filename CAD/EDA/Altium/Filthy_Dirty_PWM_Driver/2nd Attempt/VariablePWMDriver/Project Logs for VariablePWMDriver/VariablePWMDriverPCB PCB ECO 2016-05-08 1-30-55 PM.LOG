@@ -1,0 +1,41 @@
+Added Component: Designator=100KPot(VR5)
+Added Component: Designator=C3(C0805)
+Added Component: Designator=C4(C0805)
+Added Component: Designator=D1(DO-35)
+Added Component: Designator=D2(DO-35)
+Added Component: Designator=Power(HDR1X2)
+Added Component: Designator=PWM(HDR1X2)
+Added Component: Designator=U1(N08E)
+Added Pin To Net: NetName=GND Pin=C3-2
+Added Pin To Net: NetName=GND Pin=C4-2
+Added Pin To Net: NetName=GND Pin=Power-2
+Added Pin To Net: NetName=GND Pin=U1-1
+Added Net: Name=GND
+Added Pin To Net: NetName=Net100KPot_1 Pin=100KPot-1
+Added Pin To Net: NetName=Net100KPot_1 Pin=D1-2
+Added Net: Name=Net100KPot_1
+Added Pin To Net: NetName=Net100KPot_2 Pin=100KPot-2
+Added Pin To Net: NetName=Net100KPot_2 Pin=D2-1
+Added Net: Name=Net100KPot_2
+Added Pin To Net: NetName=Net100KPot_3 Pin=100KPot-3
+Added Pin To Net: NetName=Net100KPot_3 Pin=U1-3
+Added Net: Name=Net100KPot_3
+Added Pin To Net: NetName=NetC3_1 Pin=C3-1
+Added Pin To Net: NetName=NetC3_1 Pin=D1-1
+Added Pin To Net: NetName=NetC3_1 Pin=D2-2
+Added Pin To Net: NetName=NetC3_1 Pin=U1-2
+Added Pin To Net: NetName=NetC3_1 Pin=U1-6
+Added Net: Name=NetC3_1
+Added Pin To Net: NetName=NetC4_1 Pin=C4-1
+Added Pin To Net: NetName=NetC4_1 Pin=U1-5
+Added Net: Name=NetC4_1
+Added Pin To Net: NetName=NetPWM_2 Pin=PWM-2
+Added Pin To Net: NetName=NetPWM_2 Pin=U1-7
+Added Net: Name=NetPWM_2
+Added Pin To Net: NetName=VCC Pin=Power-1
+Added Pin To Net: NetName=VCC Pin=PWM-1
+Added Pin To Net: NetName=VCC Pin=U1-4
+Added Pin To Net: NetName=VCC Pin=U1-8
+Added Net: Name=VCC
+Added Class: Name=VariablePWMDriverSchematic
+Added Room: Name=VariablePWMDriverSchematic

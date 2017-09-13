@@ -1,0 +1,4 @@
+Added Pin To Net: NetName=VCC Pin=Q2-1
+Added Pin To Net: NetName=NetQ1_2 Pin=Q2-2
+Added Pin To Net: NetName=NetQ1_3 Pin=Q2-3
+Added Member To Class: ClassName=VariableStoboscope_Rev1.0 Member=Component Q2 BD439_2
