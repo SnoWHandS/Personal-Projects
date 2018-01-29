@@ -1,8 +1,10 @@
+#include "HID-Project.h"
 
 boolean previous_clk_pin_state = false;
 const int clk_pin = 3;
 const int data_pin = 2;
 const int btn_pin = 7;
+const int touch_pin = 15;
 
 boolean clk_pin_state = true;
 boolean data_pin_state = true;
@@ -15,8 +17,9 @@ void setup() {
   //pinMode(clk_pin, INPUT);
   //pinMode(data_pin, INPUT);
   pinMode(btn_pin, INPUT);
-
+  pinMode(touch_pin, INPUT);
   Serial.begin(9600);
+  Consumer.begin();
 }
 
 void loop() {
@@ -29,7 +32,7 @@ void loop() {
       if(data_pin_state != clk_pin_state){
         downCount++;
         if(downCount>=2){
-        //Consumer.write(MEDIA_VOLUME_DOWN);
+        Consumer.write(MEDIA_VOLUME_DOWN);
         Serial.println("Incr down");  
         downCount =0;
         }
@@ -37,13 +40,18 @@ void loop() {
       else{
         upCount++;
         if(upCount>=2){
-        //Consumer.write(MEDIA_VOLUME_UP);
+        Consumer.write(MEDIA_VOLUME_UP);
         Serial.println("Incr up");
         upCount =0;
         }
       }  
     }
     previous_clk_pin_state = clk_pin_state;
+    if(!digitalRead(touch_pin)){
+      Serial.println("touch detected");
+      Consumer.write(MEDIA_VOLUME_MUTE);
+      delay(250);
+    }
   }
   boolean btn_state = digitalRead(btn_pin);
   if(!btn_state){
